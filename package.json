@@ -10,8 +10,8 @@
     "start": "node .",
     "start:dev": "nodemon -q",
     "prepare": "husky install",
-    "test-coverage": "jest src --coverage --watchAll=false --passWithNoTests",
-    "test": "jest src --passWithNoTests"
+    "test-coverage": "jest src --coverage --watchAll=false",
+    "test": "jest src"
   },
   "engines": {
     "node": ">=16.0.0"
