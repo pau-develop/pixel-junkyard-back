@@ -5,12 +5,16 @@
   "main": "dist/index.js",
   "scripts": {
     "ts": "tsc",
+    "build": "npm run ts",
     "ts:dev": "tsc -w",
     "start": "node .",
     "start:dev": "nodemon -q",
     "prepare": "husky install",
     "test-coverage": "jest src --coverage --watchAll=false --passWithNoTests",
     "test": "jest src --passWithNoTests"
+  },
+  "engines": {
+    "node": ">=16.0.0"
   },
   "keywords": [],
   "author": "",
