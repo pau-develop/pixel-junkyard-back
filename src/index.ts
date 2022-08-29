@@ -1,11 +1,12 @@
-import express from "express";
-import morgan from "morgan";
-import cors from "cors";
+import "./loadEnvironment";
+import startServer from "./server/startServer";
 
-const app = express();
+const port = +process.env.PORT || 4000;
 
-app.use(cors());
-app.use(morgan("dev"));
-app.use(express.json());
-
-export default app;
+(async () => {
+  try {
+    await startServer(port);
+  } catch (error) {
+    process.exit(1);
+  }
+})();
