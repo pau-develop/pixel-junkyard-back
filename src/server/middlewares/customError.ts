@@ -12,11 +12,9 @@ const customError = (
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   next: NextFunction
 ) => {
-  const errorCode = error.statusCode ?? 500;
-  const errorMessage = error.errorMessage ?? "Bad gateway";
-  debug(chalk.red(errorMessage));
+  debug(chalk.red(error));
 
-  res.status(errorCode).json({ error: errorMessage });
+  res.status(error.statusCode).json({ error: error.errorMessage });
 };
 
 export default customError;
