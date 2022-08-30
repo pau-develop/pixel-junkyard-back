@@ -8,7 +8,8 @@ describe("Given a createUser Function", () => {
     test("It should invoke the reponse 'status' method with 201", async () => {
       const mockUser = {
         userName: "artist",
-        password: "123",
+        password: "12345",
+        email: "fake@fake.com",
       } as Partial<Request>;
 
       const req = { body: mockUser } as Partial<Request>;
@@ -27,7 +28,8 @@ describe("Given a createUser Function", () => {
     test("It should invoke the reponse 'json' method with the mockUser", async () => {
       const mockUser = {
         userName: "artist",
-        password: "123",
+        password: "12345",
+        email: "fake@fake.com",
       };
 
       User.create = jest.fn().mockReturnValue(mockUser);
@@ -48,7 +50,8 @@ describe("Given a createUser Function", () => {
     test("If something went wrong, it should send a customError to the errors middleware", async () => {
       const mockUser = {
         userName: "artist",
-        password: "123",
+        password: "12345",
+        email: "fake@fake.com",
       };
       User.create = jest.fn().mockRejectedValue(new Error(""));
       const error = createCustomError(404, "ERROR! Username already taken");
