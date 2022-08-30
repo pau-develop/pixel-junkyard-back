@@ -7,8 +7,8 @@ const port = +process.env.PORT || 4000;
 
 (async () => {
   try {
-    await connectToDB(mongoUrl);
-    await startServer(port);
+    connectToDB(mongoUrl);
+    startServer(port);
   } catch (error) {
     process.exit(1);
   }
