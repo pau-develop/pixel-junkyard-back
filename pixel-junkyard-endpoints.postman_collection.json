@@ -1,0 +1,27 @@
+{
+  "info": {
+    "_postman_id": "1b7f35f5-7243-403e-92b2-51ffc7311083",
+    "name": "pixel-junkyard-endpoints",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "22254734"
+  },
+  "item": [
+    {
+      "name": "/users/register",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"userName\":\"testUser3\",\r\n    \"password\":\"123\",\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        }
+      },
+      "response": []
+    }
+  ]
+}
