@@ -47,7 +47,30 @@ describe("Given a createUser Function", () => {
       expect(res.json).toBeCalled();
     });
 
-    test("If something went wrong, it should send a customError to the errors middleware", async () => {
+    test("If something went wrong in express validation, it should send a customError to the errors middleware", async () => {
+      const mockUser = {
+        userName: "artist",
+        password: "123",
+        email: "fake@fake.com",
+      };
+      User.create = jest.fn().mockRejectedValue(new Error(""));
+      const error = createCustomError(
+        404,
+        `"password" length must be at least 5 characters long`
+      );
+      const req = { body: mockUser } as Partial<Request>;
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      } as Partial<Response>;
+      const next = jest.fn() as Partial<NextFunction>;
+
+      await registerUser(req as Request, res as Response, next as NextFunction);
+
+      expect(next).toHaveBeenCalledWith(error);
+    });
+
+    test("If something went wrong after express validation, it should send a customError to the errors middleware", async () => {
       const mockUser = {
         userName: "artist",
         password: "12345",
