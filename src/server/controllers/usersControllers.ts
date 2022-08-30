@@ -31,8 +31,12 @@ const registerUser = async (
     }
 
     user.password = await hashCreator(user.password);
-    debug(chalk.blue(`password:${user.password}`));
-    const newUser = await User.create(user);
+
+    const newUser = await User.create({
+      userName: user.userName,
+      password: user.password,
+      email: user.email,
+    });
     res.status(201).json({ user: newUser });
   } catch (error) {
     const customError = createCustomError(404, "ERROR! Username already taken");
