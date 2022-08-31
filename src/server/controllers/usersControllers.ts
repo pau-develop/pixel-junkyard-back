@@ -34,14 +34,15 @@ export const registerUser = async (
 
     user.password = await hashCreator(user.password);
 
-    const newUser = await User.create({
+    await User.create({
       userName: user.userName,
       password: user.password,
       email: user.email,
     });
-    res.status(201).json({ user: newUser });
+    const message = "User registered!";
+    res.status(201).json({ message });
   } catch (error) {
-    const customError = createCustomError(404, "ERROR! Username already taken");
+    const customError = createCustomError(404, error.message);
     next(customError);
   }
 };

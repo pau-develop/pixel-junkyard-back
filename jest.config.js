@@ -7,6 +7,5 @@ module.exports = {
     "!src/index.ts",
     "!src/server/startServer.ts",
     "!src/database/connectToDB.ts",
-    "!src/server/routers/**.ts",
   ],
 };
