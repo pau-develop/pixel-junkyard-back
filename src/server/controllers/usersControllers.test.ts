@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import User from "../../database/models/User";
 import createCustomError from "../../utils/createCustomError";
-import registerUser from "./usersControllers";
+import { registerUser } from "./usersControllers";
 
 describe("Given a createUser Function", () => {
   describe("When called", () => {
