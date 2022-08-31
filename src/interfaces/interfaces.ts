@@ -9,7 +9,6 @@ export interface JwtPayload {
 }
 
 export interface LoginData {
-  _id: string;
   userName: string;
   password: string;
 }
@@ -20,4 +19,8 @@ export interface RegisterData {
   email: string;
 }
 
-export default CustomError;
+export interface IUser {
+  _id: string;
+  userName: string;
+  password: string;
+}

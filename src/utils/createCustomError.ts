@@ -1,4 +1,4 @@
-import CustomError from "../interfaces/interfaces";
+import { CustomError } from "../interfaces/interfaces";
 
 const createCustomError = (
   code: number,

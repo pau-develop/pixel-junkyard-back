@@ -1,7 +1,20 @@
 import { NextFunction, Request, Response } from "express";
 import User from "../../database/models/User";
 import createCustomError from "../../utils/createCustomError";
-import { registerUser } from "./usersControllers";
+import { loginUser, registerUser } from "./usersControllers";
+
+const mockHashCompare = jest.fn().mockReturnValue(true);
+
+jest.mock("../../utils/auth", () => ({
+  ...jest.requireActual("../../utils/auth"),
+  hashCreate: () => jest.fn().mockReturnValue("#"),
+  hashCompare: () => mockHashCompare,
+  createToken: () => jest.fn().mockReturnValue("#"),
+}));
+
+afterEach(() => {
+  jest.clearAllMocks();
+});
 
 describe("Given a createUser Function", () => {
   describe("When called", () => {
@@ -86,6 +99,66 @@ describe("Given a createUser Function", () => {
       const next = jest.fn() as Partial<NextFunction>;
 
       await registerUser(req as Request, res as Response, next as NextFunction);
+
+      expect(next).toHaveBeenCalledWith(error);
+    });
+  });
+});
+
+describe("Given a loginUser function", () => {
+  describe("When called with a request, a response and a next function as arguments", () => {
+    const mockUser = {
+      _id: "123",
+      userName: "name",
+      password: "password",
+    };
+
+    const mockLoginData = {
+      userName: "name",
+      password: "password",
+    };
+    const req = {
+      body: mockLoginData,
+    } as Partial<Request>;
+
+    User.find = jest.fn().mockReturnValue([mockUser]);
+
+    const res = {
+      status: jest.fn().mockReturnThis(),
+      json: jest.fn(),
+    } as Partial<Response>;
+
+    const next = jest.fn() as NextFunction;
+    test("It should call status with a code of 200", async () => {
+      const status = 200;
+
+      await loginUser(req as Request, res as Response, next);
+
+      expect(res.status).toHaveBeenCalledWith(status);
+    });
+
+    test("It should respond with a new user as a body", async () => {
+      User.find = jest.fn().mockReturnValue([mockUser]);
+
+      await loginUser(req as Request, res as Response, next);
+
+      expect(res.json).toHaveBeenCalled();
+    });
+
+    test("If find method retuns an error, it should send it to the errors middleware", async () => {
+      User.find = jest.fn().mockRejectedValue(new Error("test"));
+
+      await loginUser(req as Request, res as Response, next);
+      const error = createCustomError(404, "test");
+
+      expect(next).toHaveBeenCalledWith(error);
+    });
+
+    test("If find method finds no users it should return an empty array, and an error should be sent to the errors middleware", async () => {
+      User.find = jest.fn().mockReturnValue([]);
+
+      await loginUser(req as Request, res as Response, next);
+      const error = createCustomError(404, "ERROR! User not found");
 
       expect(next).toHaveBeenCalledWith(error);
     });

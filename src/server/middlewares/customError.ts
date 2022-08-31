@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import chalk from "chalk";
 import Debug from "debug";
-import CustomError from "../../interfaces/interfaces";
+import { CustomError } from "../../interfaces/interfaces";
 
 const debug = Debug("pixel-junkyard:customError");
 
