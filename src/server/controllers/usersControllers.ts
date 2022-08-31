@@ -4,7 +4,7 @@ import { JwtPayload } from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
 import { createToken, hashCompare, hashCreator } from "../../utils/auth";
 import createCustomError from "../../utils/createCustomError";
-import registerSchema from "../../database/schemas/validationSchemas";
+import { registerSchema } from "../../database/schemas/validationSchemas";
 import { IUser, LoginData, RegisterData } from "../../interfaces/interfaces";
 import User from "../../database/models/User";
 
