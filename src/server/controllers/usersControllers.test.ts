@@ -174,5 +174,27 @@ describe("Given a loginUser function", () => {
 
       expect(next).toHaveBeenCalledWith(error);
     });
+
+    test("If something went wrong in express validation, it should send a customError to the errors middleware", async () => {
+      const mockBadLoginData = {
+        userName: "name",
+        password: "",
+      };
+
+      User.find = jest.fn().mockRejectedValue(new Error(""));
+      const error = createCustomError(
+        404,
+        `"password" is not allowed to be empty`
+      );
+      const badRequest = { body: mockBadLoginData } as Partial<Request>;
+
+      await loginUser(
+        badRequest as Request,
+        res as Response,
+        next as NextFunction
+      );
+
+      expect(next).toHaveBeenCalledWith(error);
+    });
   });
 });

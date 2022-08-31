@@ -4,7 +4,10 @@ import { JwtPayload } from "jsonwebtoken";
 import { Request, Response, NextFunction } from "express";
 import { createToken, hashCompare, hashCreator } from "../../utils/auth";
 import createCustomError from "../../utils/createCustomError";
-import registerSchema from "../../database/schemas/validationSchemas";
+import {
+  loginSchema,
+  registerSchema,
+} from "../../database/schemas/validationSchemas";
 import { IUser, LoginData, RegisterData } from "../../interfaces/interfaces";
 import User from "../../database/models/User";
 
@@ -54,8 +57,22 @@ export const loginUser = async (
 ) => {
   debug(chalk.blue("Attempting to log in..."));
   const user = req.body as LoginData;
+
   let findUsers: Array<IUser>;
   try {
+    const validation = loginSchema.validate(user, {
+      abortEarly: false,
+    });
+
+    if (validation.error) {
+      const customError = createCustomError(
+        404,
+        Object.values(validation.error.message).join("")
+      );
+      next(customError);
+      return;
+    }
+
     findUsers = await User.find({ userName: user.userName });
     if (findUsers.length === 0) {
       debug(chalk.bgRed("User not found"));
