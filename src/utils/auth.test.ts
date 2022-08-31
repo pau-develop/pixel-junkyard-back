@@ -1,4 +1,11 @@
-import { hashCompare, hashCreator } from "./auth";
+import { JwtPayload } from "jsonwebtoken";
+import { createToken, hashCompare, hashCreator } from "./auth";
+
+const mockSignature = jest.fn().mockReturnValue("#");
+
+jest.mock("jsonwebtoken", () => ({
+  sign: (payload: JwtPayload) => mockSignature(payload),
+}));
 
 describe("Given a hasCreate function", () => {
   describe("When instantiated with a string as an argument", () => {
@@ -31,6 +38,22 @@ describe("Given a hasCompare function", () => {
       const result = await hashCompare(password, hash);
 
       expect(result).toBe(true);
+    });
+  });
+});
+
+describe("Given a createToken function", () => {
+  describe("When called with a payload as an argument", () => {
+    test("Then it should call jwt and return its returned value", () => {
+      const mockToken: JwtPayload = {
+        id: "1234",
+        name: "aaa",
+      };
+
+      const returnedValue = createToken(mockToken);
+
+      expect(mockSignature).toHaveBeenCalledWith(mockToken);
+      expect(returnedValue).toBe("#");
     });
   });
 });

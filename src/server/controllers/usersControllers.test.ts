@@ -3,7 +3,7 @@ import User from "../../database/models/User";
 import createCustomError from "../../utils/createCustomError";
 import { loginUser, registerUser } from "./usersControllers";
 
-const mockHashCompare = jest.fn().mockReturnValue(true);
+let mockHashCompare = true;
 
 jest.mock("../../utils/auth", () => ({
   ...jest.requireActual("../../utils/auth"),
@@ -159,6 +159,18 @@ describe("Given a loginUser function", () => {
 
       await loginUser(req as Request, res as Response, next);
       const error = createCustomError(404, "ERROR! User not found");
+
+      expect(next).toHaveBeenCalledWith(error);
+    });
+
+    test("If password is not valid, it should send an error to the errors middleware", async () => {
+      User.find = jest.fn().mockReturnValue([mockUser]);
+
+      mockHashCompare = false;
+
+      await loginUser(req as Request, res as Response, next);
+
+      const error = createCustomError(404, "Incorrect user name or password");
 
       expect(next).toHaveBeenCalledWith(error);
     });
