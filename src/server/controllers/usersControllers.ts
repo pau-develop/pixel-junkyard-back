@@ -2,7 +2,7 @@ import Debug from "debug";
 import chalk from "chalk";
 import { Request, Response, NextFunction } from "express";
 import User, { UserData } from "../../database/models/User";
-import hashCreator from "../../utils/auth";
+import { hashCreator } from "../../utils/auth";
 import createCustomError from "../../utils/createCustomError";
 import registerSchema from "../../database/schemas/validationSchemas";
 

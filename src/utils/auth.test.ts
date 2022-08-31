@@ -1,4 +1,4 @@
-import hashCreator from "./auth";
+import { hashCreator } from "./auth";
 
 describe("Given a hasCreate function", () => {
   describe("When instantiated with a string as an argument", () => {

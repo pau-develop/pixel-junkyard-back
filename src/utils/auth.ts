@@ -1,8 +1,8 @@
 import "../loadEnvironment";
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+import jwt, { JwtPayload } from "jsonwebtoken";
 
-const hashCreator = (text: string) => {
+export const hashCreator = (text: string) => {
   const salt = 10;
   return bcrypt.hash(text, salt);
 };
@@ -10,4 +10,5 @@ const hashCreator = (text: string) => {
 export const createToken = (payload: JwtPayload) =>
   jwt.sign(payload, process.env.SECRET);
 
-export default hashCreator;
+export const hashCompare = (text: string, hash: string) =>
+  bcrypt.compare(text, hash);
