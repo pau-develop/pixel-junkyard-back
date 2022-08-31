@@ -42,43 +42,20 @@ describe("Given a usersRouter", () => {
     });
   });
 
-  // describe("When it receives a request on /login path with a 'LoginData' object", () => {
-  //   test("It should call the loginUser controller function and respond with status 200", async () => {
-  //     const userRegister = {
-  //       userName: "pepito",
-  //       password: "123456",
-  //       email: "fake@fake.com",
-  //     };
+  describe("When it receives a request on /login path with a 'LoginData' object", () => {
+    test("It should call the loginUser controller function and respond with status 200", async () => {
+      const userRegister = {
+        userName: "pepito",
+        password: "123456",
+        email: "fake@fake.com",
+      };
+      const userLogin = {
+        userName: "pepito",
+        password: "123456",
+      };
 
-  //     const userLogin = {
-  //       userName: userRegister.userName,
-  //       password: userRegister.password,
-  //     };
-
-  //     await request(app).post("/users/register").send(userRegister);
-
-  //     const response = await request(app).post("/users/login").send(userLogin);
-
-  //     expect(response.statusCode).toBe(200);
-  //   });
-
-  //   test("And if the login info doesn't match with the database users, it should response with a status of 404", async () => {
-  //     const userRegister = {
-  //       userName: "pepito",
-  //       password: "123456",
-  //       email: "fake@fake.com",
-  //     };
-
-  //     const userLogin = {
-  //       userName: "wrong user name",
-  //       password: userRegister.password,
-  //     };
-
-  //     await request(app).post("/users/register").send(userRegister);
-
-  //     const response = await request(app).post("/users/login").send(userLogin);
-
-  //     expect(response.statusCode).toBe(404);
-  //   });
-  // });
+      await request(app).post("/users/register").send(userRegister).expect(201);
+      await request(app).post("/users/login").send(userLogin).expect(200);
+    });
+  });
 });
