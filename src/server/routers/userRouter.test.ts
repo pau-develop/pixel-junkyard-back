@@ -14,6 +14,10 @@ beforeAll(async () => {
   await connectToDB(url);
 });
 
+afterEach(async () => {
+  await User.deleteMany({});
+});
+
 afterAll(async () => {
   await User.deleteMany({});
   await mongoose.connection.close();
@@ -22,7 +26,7 @@ afterAll(async () => {
 
 describe("Given a usersRouter", () => {
   describe("When it receives a request on /register path with a 'RegisterData' object", () => {
-    test("It should call the registerUser controller function", async () => {
+    test("It should call the registerUser controller function and return a message", async () => {
       const user = {
         userName: "pepito",
         password: "1235678",
@@ -37,4 +41,44 @@ describe("Given a usersRouter", () => {
       expect(body).toHaveProperty("message", message);
     });
   });
+
+  // describe("When it receives a request on /login path with a 'LoginData' object", () => {
+  //   test("It should call the loginUser controller function and respond with status 200", async () => {
+  //     const userRegister = {
+  //       userName: "pepito",
+  //       password: "123456",
+  //       email: "fake@fake.com",
+  //     };
+
+  //     const userLogin = {
+  //       userName: userRegister.userName,
+  //       password: userRegister.password,
+  //     };
+
+  //     await request(app).post("/users/register").send(userRegister);
+
+  //     const response = await request(app).post("/users/login").send(userLogin);
+
+  //     expect(response.statusCode).toBe(200);
+  //   });
+
+  //   test("And if the login info doesn't match with the database users, it should response with a status of 404", async () => {
+  //     const userRegister = {
+  //       userName: "pepito",
+  //       password: "123456",
+  //       email: "fake@fake.com",
+  //     };
+
+  //     const userLogin = {
+  //       userName: "wrong user name",
+  //       password: userRegister.password,
+  //     };
+
+  //     await request(app).post("/users/register").send(userRegister);
+
+  //     const response = await request(app).post("/users/login").send(userLogin);
+
+  //     expect(response.statusCode).toBe(404);
+  //   });
+  // });
 });
