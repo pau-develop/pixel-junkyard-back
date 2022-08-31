@@ -90,7 +90,7 @@ describe("Given a createUser Function", () => {
         email: "fake@fake.com",
       };
       User.create = jest.fn().mockRejectedValue(new Error(""));
-      const error = createCustomError(404, "ERROR! Username already taken");
+      const error = createCustomError(404, "");
       const req = { body: mockUser } as Partial<Request>;
       const res = {
         status: jest.fn().mockReturnThis(),
