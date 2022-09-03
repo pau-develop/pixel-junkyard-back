@@ -13,7 +13,7 @@ const tokenVerification = (
   res: Response,
   next: NextFunction
 ) => {
-  const customError = createCustomError(404, "Authentication error");
+  const customError = createCustomError(400, "Authentication error");
   const dataAuthentication = req.get("Authorization");
   debug(chalk.bgBlue(req));
   if (!dataAuthentication || !dataAuthentication.startsWith("Bearer ")) {
@@ -25,7 +25,8 @@ const tokenVerification = (
   try {
     tokenData = verifyToken(token);
   } catch {
-    next(customError);
+    const authError = createCustomError(401, "Unable to verify token");
+    next(authError);
     return;
   }
 
