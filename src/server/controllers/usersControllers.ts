@@ -131,3 +131,21 @@ export const getAllUsers = async (
     next(customError);
   }
 };
+
+export const getUserById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { _id: id } = req.body;
+  debug(chalk.blue(`fetching user with id ${id}...`));
+  try {
+    const user = await User.findById(id);
+    debug(chalk.greenBright(user));
+    res.status(200).json({ user });
+    debug(chalk.green("Success"));
+  } catch {
+    const customError = createCustomError(404, "Unable to fetch users");
+    next(customError);
+  }
+};
