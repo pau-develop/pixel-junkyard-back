@@ -123,9 +123,11 @@ export const getAllUsers = async (
   debug(chalk.blue("fetching all users from DB..."));
   try {
     const users = await User.find({});
-    res.status(200).json(users);
+    debug(chalk.greenBright(users));
+    res.status(200).json({ users });
     debug(chalk.green("Success"));
-  } catch (error) {
-    next(error);
+  } catch {
+    const customError = createCustomError(404, "Unable to fetch users");
+    next(customError);
   }
 };

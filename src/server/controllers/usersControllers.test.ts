@@ -219,14 +219,7 @@ describe("Given a getAllUsers function", () => {
     });
 
     test("And it should invoke the response 'json' method with a list of robots", async () => {
-      const userList = [
-        {
-          _id: "",
-          userName: "",
-          password: "",
-          email: "",
-        },
-      ];
+      const userList: any = {};
       const req = {} as Partial<Request>;
       const res = {
         status: jest.fn().mockReturnThis(),
@@ -236,7 +229,25 @@ describe("Given a getAllUsers function", () => {
 
       User.find = jest.fn().mockResolvedValue(userList);
       await getAllUsers(req as Request, res as Response, next as NextFunction);
-      expect(res.json).toBeCalledWith(userList);
+      expect(res.json).toBeCalled();
+    });
+
+    test("And if something went wrong, it should send a custom error to the errors middleware", async () => {
+      const req = {} as Partial<Request>;
+
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      } as Partial<Response>;
+
+      const next = jest.fn() as Partial<NextFunction>;
+
+      User.find = jest.fn().mockRejectedValue(new Error(""));
+      const error = createCustomError(404, `Unable to fetch users`);
+
+      await getAllUsers(req as Request, res as Response, next as NextFunction);
+
+      expect(next).toHaveBeenCalledWith(error);
     });
   });
 });

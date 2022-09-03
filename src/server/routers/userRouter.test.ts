@@ -24,7 +24,7 @@ afterAll(async () => {
   await mongoServer.stop();
 });
 
-describe("Given a usersRouter", () => {
+describe("Given a userRouter", () => {
   describe("When it receives a request on /register path with a 'RegisterData' object", () => {
     test("It should call the registerUser controller function and return a message", async () => {
       const user = {
