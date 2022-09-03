@@ -1,8 +1,12 @@
 import { JwtPayload } from "jsonwebtoken";
 import { NextFunction, Response } from "express";
+import chalk from "chalk";
+import Debug from "debug";
 import { verifyToken } from "../../utils/auth";
 import createCustomError from "../../utils/createCustomError";
 import { CustomRequest } from "./CustomRequest";
+
+const debug = Debug("pixel-junkyard:tokenVerification");
 
 const tokenVerification = (
   req: CustomRequest,
@@ -11,6 +15,7 @@ const tokenVerification = (
 ) => {
   const customError = createCustomError(404, "Authentication error");
   const dataAuthentication = req.get("Authorization");
+  debug(chalk.bgBlue(req));
   if (!dataAuthentication || !dataAuthentication.startsWith("Bearer ")) {
     next(customError);
     return;
@@ -19,15 +24,11 @@ const tokenVerification = (
   let tokenData: JwtPayload | string;
   try {
     tokenData = verifyToken(token);
-  } catch (error) {
-    next(error);
-    return;
-  }
-
-  if (typeof tokenData === "string") {
+  } catch {
     next(customError);
     return;
   }
+
   req.payload = tokenData as JwtPayload;
   next();
 };
