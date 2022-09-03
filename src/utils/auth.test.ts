@@ -1,10 +1,12 @@
 import { JwtPayload } from "jsonwebtoken";
-import { createToken, hashCompare, hashCreator } from "./auth";
+import { createToken, hashCompare, hashCreator, verifyToken } from "./auth";
 
 const mockSignature = jest.fn().mockReturnValue("#");
+const mockVerification = jest.fn().mockReturnValue(true);
 
 jest.mock("jsonwebtoken", () => ({
   sign: (payload: JwtPayload) => mockSignature(payload),
+  verify: (token: string) => mockVerification(token),
 }));
 
 describe("Given a hasCreate function", () => {
@@ -54,6 +56,19 @@ describe("Given a createToken function", () => {
 
       expect(mockSignature).toHaveBeenCalledWith(mockToken);
       expect(returnedValue).toBe("#");
+    });
+  });
+});
+
+describe("Given a verifyToken function", () => {
+  describe("When called with a token and a secret as arguments", () => {
+    test("It should return true if token is legit", () => {
+      const mockTokenString = "12345";
+
+      const returnedValue = verifyToken(mockTokenString);
+
+      expect(mockVerification).toHaveBeenCalledWith(mockTokenString);
+      expect(returnedValue).toBe(true);
     });
   });
 });
