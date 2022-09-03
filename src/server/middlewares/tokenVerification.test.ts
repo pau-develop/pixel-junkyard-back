@@ -37,7 +37,7 @@ describe("Given a tokenVerification middleware", () => {
         res as Response,
         next as NextFunction
       );
-      const customError = createCustomError(404, "Authentication error");
+      const customError = createCustomError(404, "Unable to verify token");
 
       expect(next).toHaveBeenCalledWith(customError);
     });
