@@ -114,3 +114,20 @@ export const loginUser = async (
 
   res.status(200).json(responseData);
 };
+
+export const getAllUsers = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  debug(chalk.blue("fetching all users from DB..."));
+  try {
+    const users = await User.find({});
+    debug(chalk.greenBright(users));
+    res.status(200).json({ users });
+    debug(chalk.green("Success"));
+  } catch {
+    const customError = createCustomError(404, "Unable to fetch users");
+    next(customError);
+  }
+};

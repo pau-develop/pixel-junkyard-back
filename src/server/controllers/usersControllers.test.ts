@@ -1,7 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import User from "../../database/models/User";
 import createCustomError from "../../utils/createCustomError";
-import { loginUser, registerUser } from "./usersControllers";
+import { getAllUsers, loginUser, registerUser } from "./usersControllers";
 
 let mockHashCompare = true;
 
@@ -193,6 +193,59 @@ describe("Given a loginUser function", () => {
         res as Response,
         next as NextFunction
       );
+
+      expect(next).toHaveBeenCalledWith(error);
+    });
+  });
+});
+
+describe("Given a getAllUsers function", () => {
+  describe("When called with a response and a request as arguments", () => {
+    test("It should invoke the response 'status' method with 200", async () => {
+      const req = {} as Partial<Request>;
+
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      } as Partial<Response>;
+
+      const next = jest.fn() as Partial<NextFunction>;
+
+      User.find = jest.fn();
+
+      await getAllUsers(req as Request, res as Response, next as NextFunction);
+      const status = 200;
+      expect(res.status).toBeCalledWith(status);
+    });
+
+    test("And it should invoke the response 'json' method with a list of robots", async () => {
+      const userList: any = {};
+      const req = {} as Partial<Request>;
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      } as Partial<Response>;
+      const next = jest.fn() as Partial<NextFunction>;
+
+      User.find = jest.fn().mockResolvedValue(userList);
+      await getAllUsers(req as Request, res as Response, next as NextFunction);
+      expect(res.json).toBeCalled();
+    });
+
+    test("And if something went wrong, it should send a custom error to the errors middleware", async () => {
+      const req = {} as Partial<Request>;
+
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      } as Partial<Response>;
+
+      const next = jest.fn() as Partial<NextFunction>;
+
+      User.find = jest.fn().mockRejectedValue(new Error(""));
+      const error = createCustomError(404, `Unable to fetch users`);
+
+      await getAllUsers(req as Request, res as Response, next as NextFunction);
 
       expect(next).toHaveBeenCalledWith(error);
     });

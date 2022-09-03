@@ -24,7 +24,7 @@ afterAll(async () => {
   await mongoServer.stop();
 });
 
-describe("Given a usersRouter", () => {
+describe("Given a userRouter", () => {
   describe("When it receives a request on /register path with a 'RegisterData' object", () => {
     test("It should call the registerUser controller function and return a message", async () => {
       const user = {
@@ -34,7 +34,7 @@ describe("Given a usersRouter", () => {
       };
       const message = "User registered!";
       const { body } = await request(app)
-        .post("/users/register")
+        .post("/user/register")
         .send(user)
         .expect(201);
 
@@ -54,8 +54,8 @@ describe("Given a usersRouter", () => {
         password: "123456",
       };
 
-      await request(app).post("/users/register").send(userRegister).expect(201);
-      await request(app).post("/users/login").send(userLogin).expect(200);
+      await request(app).post("/user/register").send(userRegister).expect(201);
+      await request(app).post("/user/login").send(userLogin).expect(200);
     });
   });
 });
