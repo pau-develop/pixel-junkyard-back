@@ -12,6 +12,7 @@ app.use(morgan("dev"));
 app.use(express.json());
 
 app.use("/user", userRouter);
+app.use("/users", usersRouter);
 app.use(customError);
 
 export default app;
