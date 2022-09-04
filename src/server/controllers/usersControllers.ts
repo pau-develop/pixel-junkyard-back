@@ -137,8 +137,9 @@ export const getUserById = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { _id: id } = req.body;
-  debug(chalk.blue(`fetching user with id ${id}...`));
+  const { id } = req.params;
+  debug(chalk.blue(`fetching user with id ${id}...`, req.params));
+
   try {
     const user = await User.findById(id);
     debug(chalk.greenBright(user));

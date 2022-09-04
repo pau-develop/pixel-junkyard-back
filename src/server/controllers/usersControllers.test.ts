@@ -260,8 +260,9 @@ describe("Given a getAllUsers function", () => {
 describe("Given a getUserById function", () => {
   describe("When called with a response and a request as arguments", () => {
     test("It should invoke the response 'status' method with 200", async () => {
-      const id = "1234";
-      const req = { body: id } as Partial<Request>;
+      const req = {
+        params: "" as unknown,
+      };
 
       const res = {
         status: jest.fn().mockReturnThis(),
@@ -283,8 +284,9 @@ describe("Given a getUserById function", () => {
     });
 
     test("And if something went wrong, it should send a custom error to the errors middleware", async () => {
-      const id = "1234";
-      const req = { body: id } as Partial<Request>;
+      const req = {
+        params: "1234" as unknown,
+      };
 
       const res = {
         status: jest.fn().mockReturnThis(),
