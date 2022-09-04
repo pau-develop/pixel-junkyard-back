@@ -32,13 +32,13 @@ describe("Given a userRouter", () => {
         password: "1235678",
         email: "fake@fakes.com",
       };
-      const message = "User registered!";
+
       const { body } = await request(app)
         .post("/user/register")
         .send(user)
         .expect(201);
 
-      expect(body).toHaveProperty("message", message);
+      expect(body).toHaveProperty("createdUser");
     });
   });
 

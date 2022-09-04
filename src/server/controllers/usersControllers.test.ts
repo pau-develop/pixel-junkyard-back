@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import User from "../../database/models/User";
 import createCustomError from "../../utils/createCustomError";
 import {
+  deleteUser,
   getAllUsers,
   getUserById,
   loginUser,
@@ -299,6 +300,44 @@ describe("Given a getUserById function", () => {
       const error = createCustomError(404, `Unable to fetch users`);
 
       await getUserById(req as Request, res as Response, next as NextFunction);
+
+      expect(next).toHaveBeenCalledWith(error);
+    });
+  });
+});
+
+describe("Given a deleteUser controller function", () => {
+  describe("When invoked", () => {
+    test("It should take the id received as params and delete the user with that id from the DB", async () => {
+      const req = {
+        params: "631210bb4b6e6a4c59950938" as unknown,
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      } as Partial<Response>;
+      const next = jest.fn() as Partial<NextFunction>;
+      User.findById = jest.fn().mockReturnThis();
+      User.deleteOne = jest.fn().mockReturnThis();
+
+      await deleteUser(req as Request, res as Response, next as NextFunction);
+
+      expect(res.status).toHaveBeenCalledWith(200);
+    });
+
+    test("It should take the id received as params and delete the user with that id from the DB", async () => {
+      const req = {
+        params: "631210bb4b6e6a4c59950938" as unknown,
+      };
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      } as Partial<Response>;
+      const next = jest.fn() as Partial<NextFunction>;
+      const error = createCustomError(404, `Something went wrong`);
+      User.findById = jest.fn().mockRejectedValue(new Error(""));
+
+      await deleteUser(req as Request, res as Response, next as NextFunction);
 
       expect(next).toHaveBeenCalledWith(error);
     });

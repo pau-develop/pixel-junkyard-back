@@ -27,7 +27,7 @@ afterAll(async () => {
 });
 
 describe("Given a usersRouter", () => {
-  describe("When it receives a request on /all path", () => {
+  describe("When it receives a request on users/all path", () => {
     test("It should call the getAllUsers controller function and return an array of users and the status 200", async () => {
       const { body } = await request(app)
         .get("/users/all")
@@ -38,7 +38,7 @@ describe("Given a usersRouter", () => {
     });
   });
 
-  describe("When it receives a request on /:id path", () => {
+  describe("When it receives a request on users/:id path", () => {
     test("It should call the getUserById controller function and return a user object and the status 200", async () => {
       const id = "630d15dbc57e9e3a3a3fd076";
       const { body } = await request(app)
@@ -47,6 +47,34 @@ describe("Given a usersRouter", () => {
         .expect(200);
 
       expect(body).toHaveProperty("user");
+    });
+  });
+
+  describe("When it receives a request on users/delete/:id path", () => {
+    test("It should call the getUserById controller function and return a user object and the status 200", async () => {
+      const message = "Succesfully deleted the user";
+
+      const user = {
+        userName: "pepito",
+        password: "1235678",
+        email: "fake@fakes.com",
+      };
+
+      const response = await request(app)
+        .post("/user/register")
+        .send(user)
+        .expect(201);
+      const {
+        body: {
+          createdUser: { _id: id },
+        },
+      } = response;
+      const { body } = await request(app)
+        .delete(`/users/delete/${id}`)
+        .set("Authorization", `Bearer ${token}`)
+        .expect(200);
+
+      expect(body).toHaveProperty("message", message);
     });
   });
 });

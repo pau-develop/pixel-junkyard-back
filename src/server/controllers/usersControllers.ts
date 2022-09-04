@@ -37,13 +37,13 @@ export const registerUser = async (
 
     user.password = await hashCreator(user.password);
 
-    await User.create({
+    const createdUser = await User.create({
       userName: user.userName,
       password: user.password,
       email: user.email,
     });
-    const message = "User registered!";
-    res.status(201).json({ message });
+
+    res.status(201).json({ createdUser });
   } catch (error) {
     const customError = createCustomError(404, error.message);
     next(customError);
@@ -148,5 +148,27 @@ export const getUserById = async (
   } catch {
     const customError = createCustomError(404, "Unable to fetch users");
     next(customError);
+  }
+};
+
+export const deleteUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
+  debug(chalk.blue(`deleting user with id ${id}...`, req.params));
+
+  try {
+    const user = await User.findById(id);
+    debug(user);
+    const deletedUser = await user.deleteOne({ _id: id });
+    debug(deletedUser);
+    debug(`Deleted robot with ID ${id}`);
+    res.status(200).json({ message: `Succesfully deleted the user` });
+    next();
+  } catch {
+    const error = createCustomError(404, `Something went wrong`);
+    next(error);
   }
 };
