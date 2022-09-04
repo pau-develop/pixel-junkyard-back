@@ -150,3 +150,25 @@ export const getUserById = async (
     next(customError);
   }
 };
+
+export const deleteUser = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
+  debug(chalk.blue(`deleting user with id ${id}...`, req.params));
+
+  try {
+    const user = await User.findById(id);
+    await user.deleteOne({ _id: id });
+    debug(`Deleted robot with ID ${id}`);
+    res
+      .status(200)
+      .json({ message: `Succesfully deleted the user with ID ${id}` });
+    next();
+  } catch {
+    const error = createCustomError(404, `Something went wrong`);
+    next(error);
+  }
+};
