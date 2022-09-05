@@ -5,6 +5,7 @@ import cors from "cors";
 import userRouter from "./routers/userRouter";
 import usersRouter from "./routers/usersRouter";
 import customError from "./middlewares/customError";
+import drawingsRouter from "./routers/drawingsRouter";
 
 const app = express();
 
@@ -14,6 +15,7 @@ app.use(express.json());
 
 app.use("/user", userRouter);
 app.use("/users", usersRouter);
+app.use("/drawings", drawingsRouter);
 app.use(customError);
 
 export default app;
