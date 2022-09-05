@@ -24,3 +24,11 @@ export interface IUser {
   userName: string;
   password: string;
 }
+
+export interface IDrawing {
+  _id: string;
+  name: string;
+  description: string;
+  image: string;
+  artist: string;
+}
