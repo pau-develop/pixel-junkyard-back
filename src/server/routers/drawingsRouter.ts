@@ -4,6 +4,6 @@ import tokenVerification from "../middlewares/tokenVerification";
 
 const drawingsRouter = express.Router();
 
-drawingsRouter.post("/all", tokenVerification, getAllDrawings);
+drawingsRouter.get("/all", tokenVerification, getAllDrawings);
 
 export default drawingsRouter;

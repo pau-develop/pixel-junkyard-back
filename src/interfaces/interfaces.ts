@@ -31,4 +31,5 @@ export interface IDrawing {
   description: string;
   image: string;
   artist: string;
+  resolution: string;
 }
