@@ -15,6 +15,10 @@ const drawingSchema = new Schema({
     type: String,
     required: true,
   },
+  resolution: {
+    type: String,
+    required: true,
+  },
 });
 
 const Drawing = model("Drawing", drawingSchema, "drawings");
