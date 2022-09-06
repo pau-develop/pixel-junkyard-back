@@ -37,7 +37,7 @@ export const getDrawingById = async (
     res.status(200).json({ drawing });
     debug(chalk.green("Success"));
   } catch {
-    const customError = createCustomError(404, "Unable to fetch users");
+    const customError = createCustomError(404, "Unable to fetch drawing");
     next(customError);
   }
 };
