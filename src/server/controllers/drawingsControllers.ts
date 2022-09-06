@@ -23,4 +23,23 @@ const getAllDrawings = async (
   }
 };
 
+export const getDrawingById = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
+  debug(chalk.blue(`fetching drawing with id ${id}...`, req.params));
+
+  try {
+    const drawing = await Drawing.findById(id);
+    debug(chalk.greenBright(drawing));
+    res.status(200).json({ drawing });
+    debug(chalk.green("Success"));
+  } catch {
+    const customError = createCustomError(404, "Unable to fetch drawing");
+    next(customError);
+  }
+};
+
 export default getAllDrawings;
