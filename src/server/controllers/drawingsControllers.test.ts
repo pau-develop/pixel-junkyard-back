@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import Drawing from "../../database/models/Drawing";
+import { IUser } from "../../interfaces/interfaces";
 import createCustomError from "../../utils/createCustomError";
 import getAllDrawings, { getDrawingById } from "./drawingsControllers";
 
@@ -27,7 +28,7 @@ describe("Given a getAllDrawings function", () => {
     });
 
     test("And it should invoke the response 'json' method with a list of users", async () => {
-      const userList: any = {};
+      const userList: IUser = { _id: "1", userName: "", password: "" };
       const req = {} as Partial<Request>;
       const res = {
         status: jest.fn().mockReturnThis(),

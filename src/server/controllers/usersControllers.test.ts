@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import User from "../../database/models/User";
+import { IUser } from "../../interfaces/interfaces";
 import createCustomError from "../../utils/createCustomError";
 import {
   deleteUser,
@@ -225,7 +226,7 @@ describe("Given a getAllUsers function", () => {
     });
 
     test("And it should invoke the response 'json' method with a list of users", async () => {
-      const userList: any = {};
+      const userList: IUser = { _id: "1", userName: "", password: "" };
       const req = {} as Partial<Request>;
       const res = {
         status: jest.fn().mockReturnThis(),
