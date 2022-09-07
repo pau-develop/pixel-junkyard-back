@@ -15,6 +15,10 @@ const drawingSchema = new Schema({
     type: String,
     required: true,
   },
+  _id: {
+    type: String,
+    required: true,
+  },
   resolution: {
     type: String,
     required: true,
