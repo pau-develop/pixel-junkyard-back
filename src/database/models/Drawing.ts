@@ -15,7 +15,7 @@ const drawingSchema = new Schema({
     type: String,
     required: true,
   },
-  _id: {
+  userId: {
     type: String,
     required: true,
   },
