@@ -2,7 +2,10 @@ import { Request, Response, NextFunction } from "express";
 import Drawing from "../../database/models/Drawing";
 import { IUser } from "../../interfaces/interfaces";
 import createCustomError from "../../utils/createCustomError";
-import getAllDrawings, { getDrawingById } from "./drawingsControllers";
+import getAllDrawings, {
+  createDrawing,
+  getDrawingById,
+} from "./drawingsControllers";
 
 describe("Given a getAllDrawings function", () => {
   describe("When called with a response and a request as arguments", () => {
@@ -121,6 +124,116 @@ describe("Given a getDrawingById function", () => {
         next as NextFunction
       );
 
+      expect(next).toHaveBeenCalledWith(error);
+    });
+  });
+});
+
+describe("Given a createDrawing Function", () => {
+  describe("When called", () => {
+    test("It should invoke the reponse 'status' method with 201", async () => {
+      const createdDrawing = {
+        name: "testDrawing",
+        description: "none",
+        image: "asdasdasd",
+        artist: "testArtist",
+        resolution: "32x32",
+        userId: "12345",
+      } as Partial<Request>;
+
+      const req = { body: createdDrawing } as Partial<Request>;
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      } as Partial<Response>;
+
+      const next = jest.fn() as Partial<NextFunction>;
+      Drawing.create = jest.fn().mockReturnValue(createdDrawing);
+      await createDrawing(
+        req as Request,
+        res as Response,
+        next as NextFunction
+      );
+      const status = 201;
+      expect(res.status).toBeCalledWith(status);
+    });
+
+    test("It should invoke the reponse 'json' method with the mockUser", async () => {
+      const createdDrawing = {
+        name: "testDrawing",
+        description: "none",
+        image: "asdasdasd",
+        artist: "testArtist",
+        resolution: "32x32",
+        userId: "12345",
+      } as Partial<Request>;
+
+      Drawing.create = jest.fn().mockReturnValue(createdDrawing);
+      const req = { body: createdDrawing } as Partial<Request>;
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      } as Partial<Response>;
+      const next = jest.fn() as Partial<NextFunction>;
+      Drawing.create = jest.fn();
+      await createDrawing(
+        req as Request,
+        res as Response,
+        next as NextFunction
+      );
+      expect(res.json).toBeCalled();
+    });
+
+    test("If something went wrong in express validation, it should send a customError to the errors middleware", async () => {
+      const createdDrawing = {
+        name: "a",
+        description: "none",
+        image: "asdasdasd",
+        artist: "testArtist",
+        resolution: "32x32",
+        userId: "12345",
+      } as Partial<Request>;
+      Drawing.create = jest.fn().mockRejectedValue(new Error(""));
+      const error = createCustomError(
+        404,
+        `"name" length must be at least 3 characters long`
+      );
+      const req = { body: createdDrawing } as Partial<Request>;
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      } as Partial<Response>;
+      const next = jest.fn() as Partial<NextFunction>;
+      await createDrawing(
+        req as Request,
+        res as Response,
+        next as NextFunction
+      );
+      expect(next).toHaveBeenCalledWith(error);
+    });
+
+    test("If something went wrong after express validation, it should send a customError to the errors middleware", async () => {
+      const createdDrawing = {
+        name: "aaa",
+        description: "none",
+        image: "asdasdasd",
+        artist: "testArtist",
+        resolution: "32x32",
+        userId: "12345",
+      } as Partial<Request>;
+      Drawing.create = jest.fn().mockRejectedValue(new Error(""));
+      const error = createCustomError(404, "");
+      const req = { body: createdDrawing } as Partial<Request>;
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      } as Partial<Response>;
+      const next = jest.fn() as Partial<NextFunction>;
+      await createDrawing(
+        req as Request,
+        res as Response,
+        next as NextFunction
+      );
       expect(next).toHaveBeenCalledWith(error);
     });
   });
