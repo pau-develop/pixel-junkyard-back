@@ -49,4 +49,25 @@ describe("Given a usersRouter", () => {
       expect(body).toHaveProperty("drawing");
     });
   });
+
+  describe("When it receives a request on /drawings/create path with a 'IDrawing' object", () => {
+    test("It should call the createDrawing controller function and return a message", async () => {
+      const drawing = {
+        name: "aaa",
+        description: "none",
+        image: "asdasdasd",
+        artist: "testArtist",
+        resolution: "32x32",
+        userId: "12345",
+      };
+      const message = "Drawing created!";
+      const { body } = await request(app)
+        .post("/drawings/create")
+        .set("Authorization", `Bearer ${token}`)
+        .send(drawing)
+        .expect(201);
+
+      expect(body).toHaveProperty("message", message);
+    });
+  });
 });
