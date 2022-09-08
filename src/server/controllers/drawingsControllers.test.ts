@@ -158,7 +158,7 @@ describe("Given a createDrawing Function", () => {
       expect(res.status).toBeCalledWith(status);
     });
 
-    test("It should invoke the reponse 'json' method with the mockUser", async () => {
+    test("It should invoke the reponse 'json' method with the createdUser", async () => {
       const createdDrawing = {
         name: "testDrawing",
         description: "none",

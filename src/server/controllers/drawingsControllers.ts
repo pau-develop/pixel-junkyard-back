@@ -66,7 +66,7 @@ export const createDrawing = async (
       return;
     }
 
-    const createdDrawing = await Drawing.create({
+    await Drawing.create({
       name: drawing.name,
       description: drawing.description,
       image: drawing.image,
@@ -75,8 +75,8 @@ export const createDrawing = async (
       userId: drawing.userId,
     });
 
-    res.status(201).json(createdDrawing);
-    debug(res);
+    res.status(201).json({ message: "Drawing created!" });
+    debug(res.json);
   } catch (error) {
     const customError = createCustomError(404, error.message);
     next(customError);
