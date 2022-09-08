@@ -73,6 +73,7 @@ export const createDrawing = async (
       artist: drawing.artist,
       resolution: drawing.resolution,
       userId: drawing.userId,
+      creationDate: drawing.creationDate,
     });
 
     res.status(201).json({ message: "Drawing created!" });
