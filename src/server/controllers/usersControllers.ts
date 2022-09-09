@@ -142,12 +142,12 @@ export const getUserById = async (
   const { id } = req.params;
   debug(chalk.redBright(id));
   try {
-    const drawings = await User.findById(id).populate({
+    const user = await User.findById(id).populate({
       path: "drawings",
       model: Drawing,
     });
-    debug(chalk.green(drawings));
-    res.status(200).json({ drawings });
+    debug(chalk.green(user));
+    res.status(200).json({ user });
   } catch (error) {
     const customError = createCustomError(404, "Unable to fetch drawings");
     next(customError);
