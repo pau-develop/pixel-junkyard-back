@@ -105,7 +105,7 @@ export const getUserDrawings = async (
     debug(chalk.green(drawings));
     res.status(200).json({ drawings });
   } catch (error) {
-    const customError = createCustomError(404, error.message);
+    const customError = createCustomError(404, "Unable to fetch drawings");
     next(customError);
   }
 };
