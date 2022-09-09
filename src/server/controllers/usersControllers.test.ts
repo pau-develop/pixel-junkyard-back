@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import User from "../../database/models/User";
 import { IUser } from "../../interfaces/interfaces";
 import createCustomError from "../../utils/createCustomError";
+import { CustomRequest } from "../middlewares/CustomRequest";
 import {
   deleteUser,
   getAllUsers,
@@ -259,11 +260,11 @@ describe("Given a getAllUsers function", () => {
   });
 });
 
-describe("Given a getUserById function", () => {
-  describe("When called with a response and a request as arguments", () => {
-    test("It should invoke the response 'status' method with 200", async () => {
+describe("Given a getUserById controller function", () => {
+  describe("When called", () => {
+    test("It should return the status 200", async () => {
       const req = {
-        params: "" as unknown,
+        params: "631af69fd7b1680010f8caf4" as unknown,
       };
 
       const res = {
@@ -271,23 +272,43 @@ describe("Given a getUserById function", () => {
         json: jest.fn(),
       } as Partial<Response>;
 
-      const next = jest.fn() as Partial<NextFunction>;
-      User.findById = jest.fn().mockReturnValue({
-        _id: "1",
-        userName: "",
-        password: "",
-        email: "",
-      });
+      const next = jest.fn() as NextFunction;
 
-      await getUserById(req as Request, res as Response, next as NextFunction);
-      const status = 200;
+      const mockUser = {
+        _id: "631af69fd7b1680010f8caf4",
+        userName: "testing2",
+        password:
+          "$2a$10$M/SPzuKyL0SlMy1AD2Qu2eXuztYfEX/f0fO.ZDojCzwqujSN0wz26",
+        email: "fakemail@mail.com",
+        drawings: [
+          {
+            _id: "12345",
+            name: "aaaa",
+            description: "aaaaa",
+            image: "asdasdasdasd",
+            resolution: "60x90",
+            artist: "631af69fd7b1680010f8caf4",
+            __v: "0",
+          },
+        ],
+        __v: "1",
+      };
 
-      expect(res.status).toBeCalledWith(status);
+      User.findById = jest.fn().mockReturnThis();
+      User.populate = jest.fn().mockReturnValue(mockUser);
+
+      await getUserById(
+        req as CustomRequest,
+        res as Response,
+        next as NextFunction
+      );
+
+      expect(res.status).toHaveBeenCalledWith(200);
     });
 
-    test("And if something went wrong, it should send a custom error to the errors middleware", async () => {
+    test("And if something went wrong it should send a customError to the error's middleware", async () => {
       const req = {
-        params: "1234" as unknown,
+        params: "631af69fd7b1680010f8caf4" as unknown,
       };
 
       const res = {
@@ -295,14 +316,20 @@ describe("Given a getUserById function", () => {
         json: jest.fn(),
       } as Partial<Response>;
 
-      const next = jest.fn() as Partial<NextFunction>;
+      const next = jest.fn() as NextFunction;
 
-      User.findById = jest.fn().mockRejectedValue(new Error(""));
-      const error = createCustomError(404, `Unable to fetch users`);
+      const customError = createCustomError(404, "Unable to fetch drawings");
 
-      await getUserById(req as Request, res as Response, next as NextFunction);
+      User.findById = jest.fn().mockReturnThis();
+      User.populate = jest.fn().mockRejectedValue(new Error(""));
 
-      expect(next).toHaveBeenCalledWith(error);
+      await getUserById(
+        req as CustomRequest,
+        res as Response,
+        next as NextFunction
+      );
+
+      expect(next).toHaveBeenCalledWith(customError);
     });
   });
 });
