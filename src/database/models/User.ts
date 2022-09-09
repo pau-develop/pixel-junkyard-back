@@ -15,6 +15,7 @@ const userSchema = new Schema({
     required: true,
     unique: true,
   },
+  drawings: [{ type: Schema.Types.ObjectId, ref: "Drawing" }],
 });
 
 const User = model("User", userSchema, "users");

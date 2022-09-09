@@ -6,7 +6,7 @@ import connectToDB from "../../database/connectToDB";
 import Drawing from "../../database/models/Drawing";
 import app from "../index";
 
-const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzEzODEyYmJmNzVkMGRkYzkzNjBjY2UiLCJ1c2VyTmFtZSI6InRlc3RpbmdUb2tlbiIsImlhdCI6MTY2MjIyMjY0OX0.dBZVoz75C6Uw-Nakfa0QtMcU-2nQc_Msko3YZc87k6c`;
+const token = `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MzE4N2FmOGJkYjVmMGI2YmFjNGI4YTAiLCJ1c2VyTmFtZSI6InRlc3RpbmciLCJpYXQiOjE2NjI3MTE2MjR9.7994Wtuc4xBTE_m9UeNt7ZLl7tOO22TnnoU2tJoo874`;
 
 let mongoServer: MongoMemoryServer;
 
@@ -47,27 +47,6 @@ describe("Given a usersRouter", () => {
         .expect(200);
 
       expect(body).toHaveProperty("drawing");
-    });
-  });
-
-  describe("When it receives a request on /drawings/create path with a 'IDrawing' object", () => {
-    test("It should call the createDrawing controller function and return a message", async () => {
-      const drawing = {
-        name: "aaa",
-        description: "none",
-        image: "asdasdasd",
-        artist: "testArtist",
-        resolution: "32x32",
-        userId: "12345",
-      };
-      const message = "Drawing created!";
-      const { body } = await request(app)
-        .post("/drawings/create")
-        .set("Authorization", `Bearer ${token}`)
-        .send(drawing)
-        .expect(201);
-
-      expect(body).toHaveProperty("message", message);
     });
   });
 });
