@@ -17,5 +17,4 @@ export const createDrawingSchema = Joi.object({
   image: Joi.string(),
   artist: Joi.string(),
   resolution: Joi.string(),
-  userId: Joi.string(),
 });

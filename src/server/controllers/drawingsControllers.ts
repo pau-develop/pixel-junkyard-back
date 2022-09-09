@@ -5,6 +5,8 @@ import Drawing from "../../database/models/Drawing";
 import createCustomError from "../../utils/createCustomError";
 import { IDrawing } from "../../interfaces/interfaces";
 import { createDrawingSchema } from "../../database/schemas/validationSchemas";
+import { CustomRequest } from "../middlewares/CustomRequest";
+import User from "../../database/models/User";
 
 const debug = Debug("pixel-junkyard:drawingsControllers");
 
@@ -45,12 +47,14 @@ export const getDrawingById = async (
 };
 
 export const createDrawing = async (
-  req: Request,
+  req: CustomRequest,
   res: Response,
   next: NextFunction
 ) => {
   debug(chalk.blue("Creating drawing..."));
   const drawing: IDrawing = req.body;
+  const user = req.payload;
+  debug(chalk.greenBright(user._id));
 
   try {
     const validation = createDrawingSchema.validate(drawing, {
@@ -59,27 +63,29 @@ export const createDrawing = async (
 
     if (validation.error) {
       const customError = createCustomError(
-        404,
+        405,
         Object.values(validation.error.message).join("")
       );
       next(customError);
       return;
     }
 
-    await Drawing.create({
+    const newDrawing = await Drawing.create({
       name: drawing.name,
       description: drawing.description,
       image: drawing.image,
-      artist: drawing.artist,
+      artist: user._id,
       resolution: drawing.resolution,
-      userId: drawing.userId,
-      creationDate: drawing.creationDate,
     });
 
+    const foundUser = await User.findById(user._id);
+    debug(chalk.bgRed(foundUser, newDrawing.id));
+    foundUser.drawings.push(newDrawing.id);
+    foundUser.save();
+
     res.status(201).json({ message: "Drawing created!" });
-    debug(res.json);
   } catch (error) {
-    const customError = createCustomError(404, error.message);
+    const customError = createCustomError(406, "Something went wrong");
     next(customError);
   }
 };
