@@ -90,4 +90,24 @@ export const createDrawing = async (
   }
 };
 
+export const getUserDrawings = async (
+  req: CustomRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
+  debug(chalk.redBright(id));
+  try {
+    const drawings = await User.findById(id).populate({
+      path: "drawings",
+      model: Drawing,
+    });
+    debug(chalk.green(drawings));
+    res.status(200).json({ drawings });
+  } catch (error) {
+    const customError = createCustomError(404, error.message);
+    next(customError);
+  }
+};
+
 export default getAllDrawings;
