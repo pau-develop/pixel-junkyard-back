@@ -7,6 +7,7 @@ import { CustomRequest } from "../middlewares/CustomRequest";
 import getAllDrawings, {
   createDrawing,
   getDrawingById,
+  getUserDrawings,
 } from "./drawingsControllers";
 
 describe("Given a getAllDrawings function", () => {
@@ -179,40 +180,6 @@ describe("Given a createDrawing Function", () => {
       expect(res.status).toBeCalledWith(201);
     });
 
-    test("It should invoke the reponse 'json' method with the createdUser", async () => {
-      // const user = {
-      //   _id: "1",
-      //   userName: "",
-      //   password: "",
-      //   email: "",
-      //   drawings: [""],
-      //   __v: "",
-      //   save: jest.fn(),
-      // };
-      // const createdDrawing = {
-      //   name: "testDrawing",
-      //   description: "none",
-      //   image: "asdasdasd",
-      //   artist: "testArtist",
-      //   resolution: "32x32",
-      // } as Partial<Request>;
-      // Drawing.create = jest.fn().mockReturnValue(createdDrawing);
-      // const req = { body: createdDrawing, payload: user } as Partial<Request>;
-      // const res = {
-      //   status: jest.fn().mockReturnThis(),
-      //   json: jest.fn(),
-      // } as Partial<Response>;
-      // const next = jest.fn() as Partial<NextFunction>;
-      // Drawing.create = jest.fn();
-      // User.findById = jest.fn().mockReturnValue(user);
-      // await createDrawing(
-      //   req as CustomRequest,
-      //   res as Response,
-      //   next as NextFunction
-      // );
-      // expect(next).toBeCalledWith("");
-    });
-
     test("If something went wrong in express validation, it should send a customError to the errors middleware", async () => {
       const createdDrawing = {
         name: "a",
@@ -284,6 +251,80 @@ describe("Given a createDrawing Function", () => {
         next as NextFunction
       );
       expect(next).toHaveBeenCalledWith(error);
+    });
+  });
+});
+
+describe("Given a getUserDrawings controller function", () => {
+  describe("When called", () => {
+    test("It should return the status 200", async () => {
+      const req = {
+        params: "631af69fd7b1680010f8caf4" as unknown,
+      };
+
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      } as Partial<Response>;
+
+      const next = jest.fn() as NextFunction;
+
+      const mockUser = {
+        _id: "631af69fd7b1680010f8caf4",
+        userName: "testing2",
+        password:
+          "$2a$10$M/SPzuKyL0SlMy1AD2Qu2eXuztYfEX/f0fO.ZDojCzwqujSN0wz26",
+        email: "fakemail@mail.com",
+        drawings: [
+          {
+            _id: "12345",
+            name: "aaaa",
+            description: "aaaaa",
+            image: "asdasdasdasd",
+            resolution: "60x90",
+            artist: "631af69fd7b1680010f8caf4",
+            __v: "0",
+          },
+        ],
+        __v: "1",
+      };
+
+      User.findById = jest.fn().mockReturnThis();
+      User.populate = jest.fn().mockReturnValue(mockUser);
+
+      await getUserDrawings(
+        req as CustomRequest,
+        res as Response,
+        next as NextFunction
+      );
+
+      expect(res.status).toHaveBeenCalledWith(200);
+    });
+
+    test("And if something went wrong it should send a customError to the error's middleware", async () => {
+      const req = {
+        params: "631af69fd7b1680010f8caf4" as unknown,
+      };
+
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      } as Partial<Response>;
+
+      const next = jest.fn() as NextFunction;
+
+      const customError = createCustomError(404, "Unable to fetch drawings");
+
+      User.findById = jest.fn().mockReturnThis();
+      User.populate = jest.fn().mockRejectedValue(new Error(""));
+
+      await getUserDrawings(
+        req as CustomRequest,
+        res as Response,
+        next as NextFunction
+      );
+
+      expect(next).toHaveBeenCalledWith(customError);
     });
   });
 });
