@@ -37,16 +37,4 @@ describe("Given a usersRouter", () => {
       expect(body).toHaveProperty("drawings", []);
     });
   });
-
-  describe("When it receives a request on drawings/:id path", () => {
-    test("It should call the getDrawingById controller function and return a drawing object and the status 200", async () => {
-      const id = "63164113ba871815e6cd02b0";
-      const { body } = await request(app)
-        .get(`/drawings/${id}`)
-        .set("Authorization", `Bearer ${token}`)
-        .expect(200);
-
-      expect(body).toHaveProperty("drawing");
-    });
-  });
 });

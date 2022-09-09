@@ -10,6 +10,8 @@ import {
 } from "../../database/schemas/validationSchemas";
 import { IUser, LoginData, RegisterData } from "../../interfaces/interfaces";
 import User from "../../database/models/User";
+import { CustomRequest } from "../middlewares/CustomRequest";
+import Drawing from "../../database/models/Drawing";
 
 const debug = Debug("pixel-junkyard:usersControllers");
 
@@ -133,20 +135,21 @@ export const getAllUsers = async (
 };
 
 export const getUserById = async (
-  req: Request,
+  req: CustomRequest,
   res: Response,
   next: NextFunction
 ) => {
   const { id } = req.params;
-  debug(chalk.blue(`fetching user with id ${id}...`, req.params));
-
+  debug(chalk.redBright(id));
   try {
-    const user = await User.findById(id);
-    debug(chalk.greenBright(user));
-    res.status(200).json({ user });
-    debug(chalk.green("Success"));
-  } catch {
-    const customError = createCustomError(404, "Unable to fetch users");
+    const drawings = await User.findById(id).populate({
+      path: "drawings",
+      model: Drawing,
+    });
+    debug(chalk.green(drawings));
+    res.status(200).json({ drawings });
+  } catch (error) {
+    const customError = createCustomError(404, "Unable to fetch drawings");
     next(customError);
   }
 };
