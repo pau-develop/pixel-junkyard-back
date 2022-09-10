@@ -29,7 +29,7 @@ describe("Given a getAllDrawings function", () => {
     });
 
     test("And it should invoke the response 'json' method with a list of users", async () => {
-      const userList: IUser = { _id: "1", userName: "", password: "" };
+      const userList: IUser = { id: "1", userName: "", password: "" };
       const req = {} as Partial<Request>;
       const res = {
         status: jest.fn().mockReturnThis(),
@@ -71,13 +71,12 @@ describe("Given a getDrawingById function", () => {
         params: "" as unknown,
       };
       const mockArtist = {
-        _id: "63187af8bdb5f0b6bac4b8a0",
+        id: "63187af8bdb5f0b6bac4b8a0",
         userName: "testing",
         password:
           "$2a$10$nivAu3co14h3X0sQ9liD.e7HDKqBuK/uXQFrl8ZtTMO4riX5Ljn5e",
         email: "fakemail@mailzzz.com",
         drawings: ["631be16485600fd78e91132a"],
-        __v: "20",
       };
       const res = {
         status: jest.fn().mockReturnThis(),
@@ -130,7 +129,7 @@ describe("Given a createDrawing Function", () => {
       } as Partial<Request>;
 
       const createdDrawing = {
-        _id: "12345",
+        id: "12345",
         name: "testDrawing",
         description: "none",
         image: "asdasdasd",
@@ -139,12 +138,12 @@ describe("Given a createDrawing Function", () => {
       } as Partial<Request>;
 
       const user = {
-        _id: "631b157b469ae9f52c4dd0e7",
+        id: "631b157b469ae9f52c4dd0e7",
         userName: "testUser",
         password: "12345",
         email: "fake@fake",
         drawings: ["1234", "1234"],
-        __v: "0",
+
         save: jest.fn(),
       };
 
@@ -176,12 +175,12 @@ describe("Given a createDrawing Function", () => {
       } as Partial<Request>;
 
       const user = {
-        _id: "631b157b469ae9f52c4dd0e7",
+        id: "631b157b469ae9f52c4dd0e7",
         userName: "testUser",
         password: "12345",
         email: "fake@fake",
         drawings: ["1234", "1234"],
-        __v: "0",
+
         save: jest.fn(),
       };
 
@@ -214,12 +213,12 @@ describe("Given a createDrawing Function", () => {
       } as Partial<Request>;
 
       const user = {
-        _id: "631b157b469ae9f52c4dd0e7",
+        id: "631b157b469ae9f52c4dd0e7",
         userName: "testUser",
         password: "12345",
         email: "fake@fake",
         drawings: ["1234", "1234"],
-        __v: "0",
+
         save: jest.fn(),
       };
 

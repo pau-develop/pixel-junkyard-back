@@ -77,12 +77,13 @@ export const createDrawing = async (
       name: drawing.name,
       description: drawing.description,
       image: drawing.image,
-      artist: user._id,
+      artist: user.id,
+      artistName: drawing.artistName,
       resolution: drawing.resolution,
     });
 
     const foundUser = await User.findById(user._id);
-    debug(chalk.bgRed(foundUser, newDrawing.id));
+    debug(chalk.bgRed(foundUser, newDrawing._id));
     foundUser.drawings.push(newDrawing.id);
     foundUser.save();
 

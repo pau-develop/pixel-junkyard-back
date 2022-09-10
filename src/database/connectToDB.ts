@@ -7,6 +7,20 @@ const debug = Debug("pixel-junkyard:database:index");
 
 const connectToDB = (mongUrl: string) => {
   new Promise((resolve, reject) => {
+    mongoose.set("toJSON", {
+      virtuals: true,
+      transform: (doc, ret) => {
+        const newDocument = { ...ret };
+
+        // eslint-disable-next-line no-underscore-dangle
+        delete newDocument.__v;
+        // eslint-disable-next-line no-underscore-dangle
+        delete newDocument._id;
+        delete newDocument.password;
+        return newDocument;
+      },
+    });
+
     mongoose.connect(mongUrl, (error) => {
       if (error) {
         debug(chalk.bgRedBright("Error connecting to DB", error.message));
