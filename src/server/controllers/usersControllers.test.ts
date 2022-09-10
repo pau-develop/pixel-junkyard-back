@@ -116,7 +116,7 @@ describe("Given a createUser Function", () => {
 describe("Given a loginUser function", () => {
   describe("When called with a request, a response and a next function as arguments", () => {
     const mockUser = {
-      _id: "123",
+      id: "123",
       userName: "name",
       password: "password",
     };
@@ -227,7 +227,7 @@ describe("Given a getAllUsers function", () => {
     });
 
     test("And it should invoke the response 'json' method with a list of users", async () => {
-      const userList: IUser = { _id: "1", userName: "", password: "" };
+      const userList: IUser = { id: "1", userName: "", password: "" };
       const req = {} as Partial<Request>;
       const res = {
         status: jest.fn().mockReturnThis(),
@@ -275,23 +275,21 @@ describe("Given a getUserById controller function", () => {
       const next = jest.fn() as NextFunction;
 
       const mockUser = {
-        _id: "631af69fd7b1680010f8caf4",
+        id: "631af69fd7b1680010f8caf4",
         userName: "testing2",
         password:
           "$2a$10$M/SPzuKyL0SlMy1AD2Qu2eXuztYfEX/f0fO.ZDojCzwqujSN0wz26",
         email: "fakemail@mail.com",
         drawings: [
           {
-            _id: "12345",
+            id: "12345",
             name: "aaaa",
             description: "aaaaa",
             image: "asdasdasdasd",
             resolution: "60x90",
             artist: "631af69fd7b1680010f8caf4",
-            __v: "0",
           },
         ],
-        __v: "1",
       };
 
       User.findById = jest.fn().mockReturnThis();

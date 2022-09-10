@@ -103,7 +103,7 @@ export const loginUser = async (
   }
 
   const payLoad: JwtPayload = {
-    _id: findUsers[0]._id,
+    id: findUsers[0].id,
     userName: findUsers[0].userName,
   };
   debug(payLoad);
@@ -165,7 +165,7 @@ export const deleteUser = async (
   try {
     const user = await User.findById(id);
     debug(user);
-    const deletedUser = await user.deleteOne({ _id: id });
+    const deletedUser = await user.deleteOne({ id });
     debug(deletedUser);
     debug(`Deleted robot with ID ${id}`);
     res.status(200).json({ message: `Succesfully deleted the user` });
