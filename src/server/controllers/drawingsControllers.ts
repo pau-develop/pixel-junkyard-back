@@ -36,12 +36,15 @@ export const getDrawingById = async (
   debug(chalk.blue(`fetching drawing with id ${id}...`, req.params));
 
   try {
-    const drawing = await Drawing.findById(id);
+    const drawing = await Drawing.findById(id).populate({
+      path: "artist",
+      model: User,
+    });
     debug(chalk.greenBright(drawing));
     res.status(200).json({ drawing });
     debug(chalk.green("Success"));
-  } catch {
-    const customError = createCustomError(404, "Unable to fetch drawing");
+  } catch (error) {
+    const customError = createCustomError(404, "Somethign went wrong");
     next(customError);
   }
 };
