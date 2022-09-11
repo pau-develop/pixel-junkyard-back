@@ -57,7 +57,7 @@ export const createDrawing = async (
   debug(chalk.blue("Creating drawing..."));
   const drawing: IDrawing = req.body;
   const user = req.payload;
-  debug(chalk.greenBright(user._id));
+  debug(chalk.greenBright(user.id));
 
   try {
     const validation = createDrawingSchema.validate(drawing, {
@@ -82,8 +82,9 @@ export const createDrawing = async (
       resolution: drawing.resolution,
     });
 
-    const foundUser = await User.findById(user._id);
-    debug(chalk.bgRed(foundUser, newDrawing._id));
+    const foundUser = await User.findById(user.id);
+    debug(chalk.bgRed(foundUser));
+    debug(chalk.bgRed(newDrawing._id));
     foundUser.drawings.push(newDrawing.id);
     foundUser.save();
 
