@@ -19,6 +19,10 @@ const drawingSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: "User",
   },
+  artistName: {
+    type: String,
+    required: true,
+  },
 });
 
 const Drawing = model("Drawing", drawingSchema, "drawings");

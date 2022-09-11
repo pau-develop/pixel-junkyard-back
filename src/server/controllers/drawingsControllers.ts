@@ -56,8 +56,9 @@ export const createDrawing = async (
 ) => {
   debug(chalk.blue("Creating drawing..."));
   const drawing: IDrawing = req.body;
+  debug(chalk.bgCyan(drawing.artistName));
   const user = req.payload;
-  debug(chalk.greenBright(user.id));
+  debug(chalk.greenBright(user.userName));
 
   try {
     const validation = createDrawingSchema.validate(drawing, {
@@ -84,7 +85,7 @@ export const createDrawing = async (
 
     const foundUser = await User.findById(user.id);
     debug(chalk.bgRed(foundUser));
-    debug(chalk.bgRed(newDrawing._id));
+    debug(chalk.bgRed(newDrawing));
     foundUser.drawings.push(newDrawing.id);
     foundUser.save();
 
