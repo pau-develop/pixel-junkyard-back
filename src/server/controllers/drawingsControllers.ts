@@ -89,7 +89,39 @@ export const createDrawing = async (
 
     res.status(201).json({ message: "Drawing created!" });
   } catch (error) {
-    const customError = createCustomError(406, "Something went wrong");
+    const customError = createCustomError(406, error.message);
+    next(customError);
+  }
+};
+
+export const deleteDrawing = async (
+  req: CustomRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const { id } = req.params;
+  const { id: payloadId } = req.payload;
+  debug(`Trying to delete drawing with id ${id}`);
+
+  try {
+    const drawing = await Drawing.find({ id });
+
+    if (drawing.length === 0) {
+      next(createCustomError(404, "No drawing found with current id"));
+      return;
+    }
+    await Drawing.deleteOne({ id });
+    debug(`Deleted drawing with ID ${id}`);
+    await User.findOneAndUpdate(
+      { _id: payloadId },
+      { $pull: { drawings: id } }
+    );
+    res
+      .status(200)
+      .json({ message: `Succesfully deleted the drawing with ID ${id}` });
+    next();
+  } catch (error) {
+    const customError = createCustomError(404, "Something went wrong");
     next(customError);
   }
 };
