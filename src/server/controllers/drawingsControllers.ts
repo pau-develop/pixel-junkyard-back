@@ -101,26 +101,20 @@ export const deleteDrawing = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { id } = req.params;
-  const { id: payloadId } = req.payload;
-  debug(`Trying to delete drawing with id ${id}`);
+  const { drawingId } = req.params;
+  const { id } = req.payload;
+  debug(`drawingId:${drawingId},userId:${id}`);
 
   try {
-    const drawing = await Drawing.find({ id });
-
-    if (drawing.length === 0) {
-      next(createCustomError(404, "No drawing found with current id"));
-      return;
-    }
-    await Drawing.deleteOne({ id });
-    debug(`Deleted drawing with ID ${id}`);
+    await Drawing.deleteOne({ drawingId });
     await User.findOneAndUpdate(
-      { _id: payloadId },
-      { $pull: { drawings: id } }
+      { _id: id },
+      { $pull: { drawings: drawingId } }
     );
-    res
-      .status(200)
-      .json({ message: `Succesfully deleted the drawing with ID ${id}` });
+
+    res.status(200).json({
+      message: `Succesfully deleted the drawing with ID ${drawingId}`,
+    });
     next();
   } catch (error) {
     const customError = createCustomError(404, "Something went wrong");

@@ -11,6 +11,6 @@ const drawingsRouter = express.Router();
 drawingsRouter.get("/all", tokenVerification, getAllDrawings);
 drawingsRouter.get("/:id", tokenVerification, getDrawingById);
 drawingsRouter.post("/create", tokenVerification, createDrawing);
-drawingsRouter.delete("/delete/:id", tokenVerification, deleteDrawing);
+drawingsRouter.delete("/delete/:drawingId", tokenVerification, deleteDrawing);
 
 export default drawingsRouter;
