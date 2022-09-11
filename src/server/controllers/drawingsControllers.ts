@@ -3,7 +3,6 @@ import chalk from "chalk";
 import { Request, Response, NextFunction } from "express";
 import Drawing from "../../database/models/Drawing";
 import createCustomError from "../../utils/createCustomError";
-import { IDrawing } from "../../interfaces/interfaces";
 import { createDrawingSchema } from "../../database/schemas/validationSchemas";
 import { CustomRequest } from "../middlewares/CustomRequest";
 import User from "../../database/models/User";
@@ -55,7 +54,7 @@ export const createDrawing = async (
   next: NextFunction
 ) => {
   debug(chalk.blue("Creating drawing..."));
-  const drawing: IDrawing = req.body;
+  const drawing = req.body;
   debug(chalk.bgCyan(drawing.artistName));
   const user = req.payload;
   debug(chalk.greenBright(user.userName));
