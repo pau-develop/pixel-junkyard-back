@@ -106,7 +106,8 @@ export const deleteDrawing = async (
   debug(`drawingId:${drawingId},userId:${id}`);
 
   try {
-    await Drawing.deleteOne({ drawingId });
+    const result = await Drawing.deleteOne({ _id: drawingId });
+    debug(result);
     await User.findOneAndUpdate(
       { _id: id },
       { $pull: { drawings: drawingId } }
