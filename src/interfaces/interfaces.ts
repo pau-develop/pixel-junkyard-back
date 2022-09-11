@@ -33,5 +33,4 @@ export interface IDrawing {
   artist: string;
   resolution: string;
   artistName: string;
-  creationDate: string;
 }
