@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import Drawing from "../../database/models/Drawing";
 import User from "../../database/models/User";
-import { IUser } from "../../interfaces/interfaces";
+import { IDrawing } from "../../interfaces/interfaces";
 import createCustomError from "../../utils/createCustomError";
 import { CustomRequest } from "../middlewares/CustomRequest";
 import getAllDrawings, {
@@ -30,14 +30,14 @@ describe("Given a getAllDrawings function", () => {
     });
 
     test("And it should invoke the response 'json' method with a list of users", async () => {
-      const userList: IUser = { id: "1", userName: "", password: "" };
+      const drawingList: IDrawing[] = [];
       const req = {} as Partial<Request>;
       const res = {
         status: jest.fn().mockReturnThis(),
         json: jest.fn(),
       } as Partial<Response>;
       const next = jest.fn() as Partial<NextFunction>;
-      Drawing.find = jest.fn().mockResolvedValue(userList);
+      Drawing.find = jest.fn().mockResolvedValue(drawingList);
       await getAllDrawings(
         req as Request,
         res as Response,

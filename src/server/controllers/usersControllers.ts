@@ -43,6 +43,7 @@ export const registerUser = async (
       userName: user.userName,
       password: user.password,
       email: user.email,
+      avatar: "???",
     });
 
     res.status(201).json({ createdUser });
@@ -173,5 +174,27 @@ export const deleteUser = async (
   } catch {
     const error = createCustomError(404, `Something went wrong`);
     next(error);
+  }
+};
+
+export const updateUser = async (
+  req: CustomRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { newAvatar } = req.body;
+    const { id } = req.payload;
+    debug("hola", newAvatar);
+    debug(newAvatar, id);
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: id },
+      { $set: { avatar: newAvatar } }
+    );
+    debug(updatedUser);
+    res.status(200).json({ updatedUser });
+  } catch (error) {
+    const customError = createCustomError(404, "Something went wrong");
+    next(customError);
   }
 };

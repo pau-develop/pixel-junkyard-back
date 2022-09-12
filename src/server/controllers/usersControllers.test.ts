@@ -9,6 +9,7 @@ import {
   getUserById,
   loginUser,
   registerUser,
+  updateUser,
 } from "./usersControllers";
 
 let mockHashCompare = true;
@@ -227,7 +228,12 @@ describe("Given a getAllUsers function", () => {
     });
 
     test("And it should invoke the response 'json' method with a list of users", async () => {
-      const userList: IUser = { id: "1", userName: "", password: "" };
+      const userList: IUser = {
+        id: "1",
+        userName: "",
+        password: "",
+        avatar: "",
+      };
       const req = {} as Partial<Request>;
       const res = {
         status: jest.fn().mockReturnThis(),
@@ -364,6 +370,64 @@ describe("Given a deleteUser controller function", () => {
       User.findById = jest.fn().mockRejectedValue(new Error(""));
 
       await deleteUser(req as Request, res as Response, next as NextFunction);
+
+      expect(next).toHaveBeenCalledWith(error);
+    });
+  });
+});
+
+describe("Given a updateUser function", () => {
+  describe("When called with a base64 string as argument", () => {
+    test("It should update the avatar property of IUser with the base64 string and respond with status 200", async () => {
+      const newAvatar = "avatar";
+      const user = {
+        id: "631b157b469ae9f52c4dd0e7",
+        userName: "testUser",
+        password: "12345",
+        email: "fake@fake",
+        avatar: "???",
+        drawings: ["1234", "1234"],
+      };
+      const req = { body: newAvatar, payload: user } as Partial<Request>;
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      } as Partial<Response>;
+      const next = jest.fn() as Partial<NextFunction>;
+      User.findOneAndUpdate = jest.fn();
+
+      await updateUser(
+        req as CustomRequest,
+        res as Response,
+        next as NextFunction
+      );
+
+      expect(res.status).toHaveBeenCalledWith(200);
+    });
+    test("And if something went wrong, an error should be sent to the errors middleware", async () => {
+      const newAvatar = "avatar";
+      const user = {
+        id: "631b157b469ae9f52c4dd0e7",
+        userName: "testUser",
+        password: "12345",
+        email: "fake@fake",
+        avatar: "???",
+        drawings: ["1234", "1234"],
+      };
+      const req = { body: newAvatar, payload: user } as Partial<Request>;
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      } as Partial<Response>;
+      const next = jest.fn() as Partial<NextFunction>;
+      User.findOneAndUpdate = jest.fn().mockRejectedValue(new Error(""));
+
+      await updateUser(
+        req as CustomRequest,
+        res as Response,
+        next as NextFunction
+      );
+      const error = createCustomError(404, "Something went wrong");
 
       expect(next).toHaveBeenCalledWith(error);
     });
