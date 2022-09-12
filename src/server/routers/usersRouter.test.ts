@@ -57,6 +57,7 @@ describe("Given a usersRouter", () => {
         userName: "pepito",
         password: "1235678",
         email: "fake@fakes.com",
+        avatar: "???",
       };
 
       const response = await request(app)

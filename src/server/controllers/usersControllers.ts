@@ -43,6 +43,7 @@ export const registerUser = async (
       userName: user.userName,
       password: user.password,
       email: user.email,
+      avatar: "???",
     });
 
     res.status(201).json({ createdUser });

@@ -227,7 +227,12 @@ describe("Given a getAllUsers function", () => {
     });
 
     test("And it should invoke the response 'json' method with a list of users", async () => {
-      const userList: IUser = { id: "1", userName: "", password: "" };
+      const userList: IUser = {
+        id: "1",
+        userName: "",
+        password: "",
+        avatar: "",
+      };
       const req = {} as Partial<Request>;
       const res = {
         status: jest.fn().mockReturnThis(),

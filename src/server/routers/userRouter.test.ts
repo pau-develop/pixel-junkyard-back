@@ -31,12 +31,10 @@ describe("Given a userRouter", () => {
         userName: "pepito",
         password: "1235678",
         email: "fake@fakes.com",
+        avatar: "???",
       };
 
-      const { body } = await request(app)
-        .post("/user/register")
-        .send(user)
-        .expect(201);
+      const { body } = await request(app).post("/user/register").send(user);
 
       expect(body).toHaveProperty("createdUser");
     });
@@ -48,6 +46,7 @@ describe("Given a userRouter", () => {
         userName: "pepito",
         password: "123456",
         email: "fake@fake.com",
+        avatar: "???",
       };
       const userLogin = {
         userName: "pepito",

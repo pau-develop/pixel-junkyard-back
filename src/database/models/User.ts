@@ -15,6 +15,10 @@ const userSchema = new Schema({
     required: true,
     unique: true,
   },
+  avatar: {
+    type: String,
+    required: true,
+  },
   drawings: [{ type: Schema.Types.ObjectId, ref: "Drawing" }],
 });
 
