@@ -176,3 +176,25 @@ export const deleteUser = async (
     next(error);
   }
 };
+
+export const updateUser = async (
+  req: CustomRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  try {
+    const { newAvatar } = req.body;
+    const { id } = req.payload;
+    debug("hola", newAvatar);
+    debug(newAvatar, id);
+    const updatedUser = await User.findOneAndUpdate(
+      { _id: id },
+      { $set: { avatar: newAvatar } }
+    );
+    debug(updatedUser);
+    res.status(200).json({ updatedUser });
+  } catch (error) {
+    const customError = createCustomError(404, "Something went wrong");
+    next(customError);
+  }
+};
