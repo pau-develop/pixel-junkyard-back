@@ -16,13 +16,24 @@ const getAllDrawings = async (
 ) => {
   debug(chalk.blue("fetching all drawings from DB..."));
   try {
-    const { offset, limit } = req.query;
-    const totalDocs = await Drawing.countDocuments();
-    debug(totalDocs);
-    debug(chalk.bgBlueBright(offset, limit));
-    const drawings = await Drawing.find({})
-      .skip(offset as unknown as number)
-      .limit(limit as unknown as number);
+    const { offset, limit, resolution } = req.query;
+
+    debug(chalk.bgBlueBright(offset, limit, resolution));
+    debug(resolution);
+    let totalDocs;
+    let drawings;
+    if (resolution === undefined) {
+      debug("pasa per aqui");
+      drawings = await Drawing.find({})
+        .skip(offset as unknown as number)
+        .limit(limit as unknown as number);
+      totalDocs = await Drawing.countDocuments();
+    } else {
+      drawings = await Drawing.find({ resolution })
+        .skip(offset as unknown as number)
+        .limit(limit as unknown as number);
+      totalDocs = await Drawing.countDocuments({ resolution });
+    }
     res.status(200).json({ drawings, totalDocs });
     debug(chalk.green("Success"));
   } catch {
