@@ -38,11 +38,37 @@ describe("Given a getAllDrawings function", () => {
       expect(res.status).toBeCalledWith(status);
     });
 
-    test("And it should invoke the response 'json' method with a list of users", async () => {
+    test("And it should invoke the response 'json' method with a list of drawings", async () => {
       const req = {
         query: {
           limit: "4",
           offset: "0",
+        },
+      } as Partial<Request>;
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      } as Partial<Response>;
+      const next = jest.fn() as Partial<NextFunction>;
+      Drawing.find = jest.fn().mockReturnValue({
+        skip: jest.fn().mockReturnValue({
+          limit: jest.fn().mockReturnValue(4),
+        }),
+      });
+      await getAllDrawings(
+        req as Request,
+        res as Response,
+        next as NextFunction
+      );
+      expect(res.json).toBeCalled();
+    });
+
+    test("or the json method with a list of drawings of a certain resolution", async () => {
+      const req = {
+        query: {
+          limit: "4",
+          offset: "0",
+          resolution: "90x120",
         },
       } as Partial<Request>;
       const res = {
