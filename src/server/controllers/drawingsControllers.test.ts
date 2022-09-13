@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import Drawing from "../../database/models/Drawing";
 import User from "../../database/models/User";
-import { IDrawing } from "../../interfaces/interfaces";
 import createCustomError from "../../utils/createCustomError";
 import { CustomRequest } from "../middlewares/CustomRequest";
 import getAllDrawings, {
@@ -13,13 +12,22 @@ import getAllDrawings, {
 describe("Given a getAllDrawings function", () => {
   describe("When called with a response and a request as arguments", () => {
     test("It should invoke the response 'status' method with 200", async () => {
-      const req = {} as Partial<Request>;
+      const req = {
+        query: {
+          limit: "4",
+          offset: "0",
+        },
+      } as Partial<Request>;
       const res = {
         status: jest.fn().mockReturnThis(),
         json: jest.fn(),
       } as Partial<Response>;
       const next = jest.fn() as Partial<NextFunction>;
-      Drawing.find = jest.fn();
+      Drawing.find = jest.fn().mockReturnValue({
+        skip: jest.fn().mockReturnValue({
+          limit: jest.fn().mockReturnValue(4),
+        }),
+      });
       await getAllDrawings(
         req as Request,
         res as Response,
@@ -30,14 +38,22 @@ describe("Given a getAllDrawings function", () => {
     });
 
     test("And it should invoke the response 'json' method with a list of users", async () => {
-      const drawingList: IDrawing[] = [];
-      const req = {} as Partial<Request>;
+      const req = {
+        query: {
+          limit: "4",
+          offset: "0",
+        },
+      } as Partial<Request>;
       const res = {
         status: jest.fn().mockReturnThis(),
         json: jest.fn(),
       } as Partial<Response>;
       const next = jest.fn() as Partial<NextFunction>;
-      Drawing.find = jest.fn().mockResolvedValue(drawingList);
+      Drawing.find = jest.fn().mockReturnValue({
+        skip: jest.fn().mockReturnValue({
+          limit: jest.fn().mockReturnValue(4),
+        }),
+      });
       await getAllDrawings(
         req as Request,
         res as Response,
