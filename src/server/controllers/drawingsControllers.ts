@@ -16,8 +16,12 @@ const getAllDrawings = async (
 ) => {
   debug(chalk.blue("fetching all drawings from DB..."));
   try {
-    const drawings = await Drawing.find({});
-    debug(chalk.greenBright(drawings));
+    const { offset, limit } = req.query;
+
+    debug(chalk.bgBlueBright(offset, limit));
+    const drawings = await Drawing.find({})
+      .skip(offset as unknown as number)
+      .limit(limit as unknown as number);
     res.status(200).json({ drawings });
     debug(chalk.green("Success"));
   } catch {
