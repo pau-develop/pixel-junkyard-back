@@ -17,12 +17,13 @@ const getAllDrawings = async (
   debug(chalk.blue("fetching all drawings from DB..."));
   try {
     const { offset, limit } = req.query;
-
+    const totalDocs = await Drawing.countDocuments();
+    debug(totalDocs);
     debug(chalk.bgBlueBright(offset, limit));
     const drawings = await Drawing.find({})
       .skip(offset as unknown as number)
       .limit(limit as unknown as number);
-    res.status(200).json({ drawings });
+    res.status(200).json({ drawings, totalDocs });
     debug(chalk.green("Success"));
   } catch {
     const customError = createCustomError(404, "Unable to fetch drawings");

@@ -23,6 +23,7 @@ describe("Given a getAllDrawings function", () => {
         json: jest.fn(),
       } as Partial<Response>;
       const next = jest.fn() as Partial<NextFunction>;
+      Drawing.countDocuments = jest.fn().mockReturnValue(20);
       Drawing.find = jest.fn().mockReturnValue({
         skip: jest.fn().mockReturnValue({
           limit: jest.fn().mockReturnValue(4),
