@@ -232,7 +232,8 @@ describe("Given a createDrawing Function", () => {
       const error = createCustomError(
         404,
         `Name must be 3 to 10 characters long,
-        Password must be at least 5 characters long`
+        Password must be at least 5 characters long,
+        Email must be at least 5 characters long.`
       );
       const req = { body: createdDrawing, payload: user } as Partial<Request>;
       const res = {
