@@ -150,7 +150,7 @@ describe("Given a getDrawingById function", () => {
       const next = jest.fn() as Partial<NextFunction>;
       Drawing.findById = jest.fn().mockReturnThis();
       Drawing.populate = jest.fn().mockRejectedValue(new Error(""));
-      const error = createCustomError(404, "Somethign went wrong");
+      const error = createCustomError(404, "Something went wrong");
       await getDrawingById(
         req as Request,
         res as Response,
@@ -231,7 +231,8 @@ describe("Given a createDrawing Function", () => {
       Drawing.create = jest.fn().mockRejectedValue(new Error(""));
       const error = createCustomError(
         404,
-        `"name" length must be at least 3 characters long`
+        `Name must be 3 to 10 characters long,
+        Password must be at least 5 characters long`
       );
       const req = { body: createdDrawing, payload: user } as Partial<Request>;
       const res = {
@@ -264,7 +265,7 @@ describe("Given a createDrawing Function", () => {
         save: jest.fn(),
       };
       Drawing.create = jest.fn().mockRejectedValue(new Error(""));
-      const error = createCustomError(404, "");
+      const error = createCustomError(404, "Something went wrong");
       const req = { body: createdDrawing, payload: user } as Partial<Request>;
       const res = {
         status: jest.fn().mockReturnThis(),
