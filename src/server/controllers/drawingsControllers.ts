@@ -84,7 +84,8 @@ export const createDrawing = async (
       const customError = createCustomError(
         405,
         `Name must be 3 to 10 characters long,
-        Password must be at least 5 characters long`
+        Password must be at least 5 characters long,
+        Email must be at least 5 characters long.`
       );
       next(customError);
       return;
