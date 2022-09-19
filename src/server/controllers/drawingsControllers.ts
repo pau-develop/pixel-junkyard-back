@@ -59,7 +59,7 @@ export const getDrawingById = async (
     res.status(200).json({ drawing });
     debug(chalk.green("Success"));
   } catch (error) {
-    const customError = createCustomError(404, "Somethign went wrong");
+    const customError = createCustomError(404, "Something went wrong");
     next(customError);
   }
 };
@@ -83,7 +83,8 @@ export const createDrawing = async (
     if (validation.error) {
       const customError = createCustomError(
         405,
-        Object.values(validation.error.message).join("")
+        `Name must be 3 to 10 characters long,
+        Password must be at least 5 characters long`
       );
       next(customError);
       return;
@@ -106,7 +107,7 @@ export const createDrawing = async (
 
     res.status(201).json({ message: "Drawing created!" });
   } catch (error) {
-    const customError = createCustomError(406, error.message);
+    const customError = createCustomError(406, "Something went wrong");
     next(customError);
   }
 };
