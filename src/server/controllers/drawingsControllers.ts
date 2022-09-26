@@ -142,4 +142,35 @@ export const deleteDrawing = async (
   }
 };
 
+export const updateDrawing = async (
+  req: CustomRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const { drawingId } = req.params;
+  const { id } = req.payload;
+  const { isLike } = req.body;
+  debug(chalk.bgCyan(drawingId, id, isLike));
+
+  try {
+    if (isLike === "true") {
+      await Drawing.findOneAndUpdate(
+        { _id: drawingId },
+        { $push: { likes: id } }
+      );
+      res.status(200).json("Succesfully liked the drawing");
+      return;
+    }
+    await Drawing.findOneAndUpdate(
+      { _id: drawingId },
+      { $push: { dislikes: id } }
+    );
+    res.status(200).json("Succesfully disliked the drawing");
+    return;
+  } catch (error) {
+    const customError = createCustomError(404, "Something went wrong");
+    next(customError);
+  }
+};
+
 export default getAllDrawings;
