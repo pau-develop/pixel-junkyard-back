@@ -83,9 +83,8 @@ export const createDrawing = async (
     if (validation.error) {
       const customError = createCustomError(
         405,
-        `Name must be 3 to 10 characters long,
-        Password must be at least 5 characters long,
-        Email must be at least 5 characters long.`
+        `Name must be 3 to 12 characters long,
+      descripion length cannot surpass 100 characters`
       );
       next(customError);
       return;
@@ -98,11 +97,14 @@ export const createDrawing = async (
       artist: user.id,
       artistName: drawing.artistName,
       resolution: drawing.resolution,
+      creationDate: drawing.creationDate,
+      likes: [],
+      dislikes: [],
     });
 
     const foundUser = await User.findById(user.id);
     debug(chalk.bgRed(foundUser));
-    debug(chalk.bgRed(newDrawing));
+
     foundUser.drawings.push(newDrawing.id);
     foundUser.save();
 

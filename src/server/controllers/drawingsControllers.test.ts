@@ -231,9 +231,8 @@ describe("Given a createDrawing Function", () => {
       Drawing.create = jest.fn().mockRejectedValue(new Error(""));
       const error = createCustomError(
         404,
-        `Name must be 3 to 10 characters long,
-        Password must be at least 5 characters long,
-        Email must be at least 5 characters long.`
+        `Name must be 3 to 12 characters long,
+      descripion length cannot surpass 100 characters`
       );
       const req = { body: createdDrawing, payload: user } as Partial<Request>;
       const res = {
