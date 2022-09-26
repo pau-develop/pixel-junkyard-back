@@ -7,6 +7,7 @@ import getAllDrawings, {
   createDrawing,
   deleteDrawing,
   getDrawingById,
+  updateDrawing,
 } from "./drawingsControllers";
 
 describe("Given a getAllDrawings function", () => {
@@ -349,6 +350,115 @@ describe("Given a delete drawingDrawing controller function", () => {
 
       const customError = createCustomError(404, "Something went wrong");
       expect(next).toHaveBeenCalledWith(customError);
+    });
+  });
+});
+
+describe("Given a updateDrawing controller function", () => {
+  describe("When called with a drawing id as params and a 'isLike' property equal to 'true'", () => {
+    test("It should call the response status method with 200", async () => {
+      const user = {
+        id: "631b157b469ae9f52c4dd0e7",
+        userName: "testUser",
+        password: "12345",
+        email: "fake@fake",
+        drawings: ["1234", "1234"],
+      };
+
+      const req: Partial<CustomRequest> = {
+        params: { id: "1" },
+        payload: user,
+        body: {
+          isLike: "true",
+        },
+      };
+
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      } as Partial<Response>;
+
+      const next = jest.fn() as NextFunction;
+
+      Drawing.findOneAndUpdate = jest.fn();
+
+      await updateDrawing(
+        req as CustomRequest,
+        res as Response,
+        next as NextFunction
+      );
+
+      expect(res.status).toHaveBeenCalledWith(200);
+    });
+
+    test("If something went wrong, it should send a customError to the errors middleware", async () => {
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      } as Partial<Response>;
+      const user = {
+        id: "631b157b469ae9f52c4dd0e7",
+        userName: "testUser",
+        password: "12345",
+        email: "fake@fake",
+        drawings: ["1234", "1234"],
+      };
+      const next = jest.fn() as NextFunction;
+      const req: Partial<CustomRequest> = {
+        params: { id: "1" },
+        payload: user,
+        body: {
+          isLike: "true",
+        },
+      };
+
+      Drawing.findOneAndUpdate = jest.fn().mockRejectedValue(new Error(""));
+
+      await updateDrawing(
+        req as CustomRequest,
+        res as Response,
+        next as NextFunction
+      );
+
+      const customError = createCustomError(404, "Something went wrong");
+      expect(next).toHaveBeenCalledWith(customError);
+    });
+  });
+
+  describe("When called with a drawing id as params and a 'isLike' property equal to 'false'", () => {
+    test("It should call the response status method with 200", async () => {
+      const user = {
+        id: "631b157b469ae9f52c4dd0e7",
+        userName: "testUser",
+        password: "12345",
+        email: "fake@fake",
+        drawings: ["1234", "1234"],
+      };
+
+      const req: Partial<CustomRequest> = {
+        params: { id: "1" },
+        payload: user,
+        body: {
+          isLike: "false",
+        },
+      };
+
+      const res = {
+        status: jest.fn().mockReturnThis(),
+        json: jest.fn(),
+      } as Partial<Response>;
+
+      const next = jest.fn() as NextFunction;
+
+      Drawing.findOneAndUpdate = jest.fn();
+
+      await updateDrawing(
+        req as CustomRequest,
+        res as Response,
+        next as NextFunction
+      );
+
+      expect(res.status).toHaveBeenCalledWith(200);
     });
   });
 });
