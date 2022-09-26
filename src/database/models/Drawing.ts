@@ -23,6 +23,10 @@ const drawingSchema = new Schema({
     type: String,
     required: true,
   },
+  creationDate: {
+    type: String,
+    required: true,
+  },
   likes: [{ type: Schema.Types.ObjectId, ref: "User" }],
   dislikes: [{ type: Schema.Types.ObjectId, ref: "User" }],
 });
