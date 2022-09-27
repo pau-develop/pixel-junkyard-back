@@ -153,14 +153,18 @@ export const updateDrawing = async (
   debug(chalk.bgCyan(drawingId, id, isLike));
 
   try {
+    await Drawing.findOneAndUpdate(
+      { _id: drawingId },
+      { $pull: { dislikes: id } }
+    );
+    await Drawing.findOneAndUpdate(
+      { _id: drawingId },
+      { $pull: { likes: id } }
+    );
     if (isLike === "true") {
       await Drawing.findOneAndUpdate(
         { _id: drawingId },
         { $push: { likes: id } }
-      );
-      await Drawing.findOneAndUpdate(
-        { _id: drawingId },
-        { $pull: { dislikes: id } }
       );
       res.status(200).json("Succesfully liked the drawing");
       return;
@@ -169,10 +173,7 @@ export const updateDrawing = async (
       { _id: drawingId },
       { $push: { dislikes: id } }
     );
-    await Drawing.findOneAndUpdate(
-      { _id: drawingId },
-      { $pull: { likes: id } }
-    );
+
     res.status(200).json("Succesfully disliked the drawing");
     return;
   } catch (error) {
