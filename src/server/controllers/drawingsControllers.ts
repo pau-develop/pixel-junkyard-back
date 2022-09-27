@@ -158,12 +158,20 @@ export const updateDrawing = async (
         { _id: drawingId },
         { $push: { likes: id } }
       );
+      await Drawing.findOneAndUpdate(
+        { _id: drawingId },
+        { $pull: { dislikes: id } }
+      );
       res.status(200).json("Succesfully liked the drawing");
       return;
     }
     await Drawing.findOneAndUpdate(
       { _id: drawingId },
       { $push: { dislikes: id } }
+    );
+    await Drawing.findOneAndUpdate(
+      { _id: drawingId },
+      { $pull: { likes: id } }
     );
     res.status(200).json("Succesfully disliked the drawing");
     return;
